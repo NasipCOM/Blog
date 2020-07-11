@@ -58,5 +58,5 @@ class PostDelete(View):
 class PostDetail(View):
     def get(self, request, slug):
         post = get_object_or_404(Post, slug__iexact=slug)
-        return render(request, 'blog/post_detail.html', context={'post':post})
+        return render(request, 'blog/post_detail.html', context={'post':post, 'admin_object':post, 'detail':True})
 
