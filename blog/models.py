@@ -19,7 +19,10 @@ class Post(models.Model):
         return reverse('post_detail_url', kwargs={'slug':self.slug})
 
     def get_update_url(self):
-        return reverse('post_update_url', kwargs={'slug':self.slug})    
+        return reverse('post_update_url', kwargs={'slug':self.slug})
+
+    def get_delete_url(self):
+            return reverse('post_delete_url', kwargs={'slug':self.slug})        
 
     def save(self, *args, **kwargs):
         if not self.id:

@@ -4,7 +4,8 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from .models import Post
 from django.views.generic import View
-from .forms import PostForm     
+from .forms import PostForm   
+from django.urls import reverse  
 
 # Create your views here.
 def posts_list(request):
@@ -42,6 +43,17 @@ class PostUpdate(View):
             new_post = bound_form.save()
             return redirect(new_post)
         return render(request, 'blog/post_update_form', context={'form':bound_form, 'post':post})    
+
+class PostDelete(View):
+    def get(self, request,slug):
+        post = Post.objects.get(slug__iexact=slug)
+        return render(request, 'blog/post_delete_form.html', context={'post':post})
+    
+    
+    def post(self, request, slug):
+        post = Post.objects.get(slug__iexact=slug)
+        post.delete()
+        return redirect(reverse('posts_list_url'))     
 
 class PostDetail(View):
     def get(self, request, slug):
