@@ -28,13 +28,23 @@ class PostCreate(View):
             return redirect(new_post)
         return render(request, 'blog/post_create_form.html', context={'form':bound_form})
 
+class PostUpdate(View):
+    def get(self, request, slug):
+        post = Post.objects.get(slug__iexact= slug)
+        bound_form = PostForm(instance = post)
+        return render(request, 'blog/post_update_form.html', context={'form':bound_form, 'post':post})
+
+    def post(self, request, slug):
+        post = Post.objects.get(slug__iexact = slug)
+        bound_form = PostForm(request.POST, instance = post)
+
+        if bound_form.is_valid():
+            new_post = bound_form.save()
+            return redirect(new_post)
+        return render(request, 'blog/post_update_form', context={'form':bound_form, 'post':post})    
 
 class PostDetail(View):
     def get(self, request, slug):
         post = get_object_or_404(Post, slug__iexact=slug)
         return render(request, 'blog/post_detail.html', context={'post':post})
 
-
-# def post_create(self, request):
-#     form = PostForm()
-#     return render(request, 'blog/post_create_form.html', context={'form':form})
